@@ -1,13 +1,13 @@
 locals {
-    suffix = "${var.environment}-${var.region}-${random_integer.main.result}"
-    automation_account_name      = "aa-${local.suffix}"
-    log_analytics_workspace_name = "law-${local.suffix}"
-    resource_group_name          = "rg-management-${var.region}-${random_integer.main.result}"
+  suffix                       = "${var.environment}-${var.region}-${random_integer.main.result}"
+  automation_account_name      = "aa-${local.suffix}"
+  log_analytics_workspace_name = "law-${local.suffix}"
+  resource_group_name          = "rg-management-${var.region}-${random_integer.main.result}"
 }
 
 resource "random_integer" "main" {
   max = 99999
-    min = 10000
+  min = 10000
 }
 
 module "alz_management" {

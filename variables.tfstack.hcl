@@ -16,7 +16,7 @@ variable "tenant_id" {
 variable "identity_token" {
   type        = string
   description = "The identity token to use for the deployment"
-  ephemeral = true
+  ephemeral   = true
 }
 
 variable "subscription_id_main" {
