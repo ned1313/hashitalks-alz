@@ -48,11 +48,11 @@ component "management_groups" {
     dependencies              = component.bootstrap.management_group_dependencies
   }
   providers = {
-    azapi  = provider.azapi.main
-    modtm  = provider.modtm.main
-    random = provider.random.main
-    alz    = provider.alz.main
-    time   = provider.time.main
+    azapi     = provider.azapi.main
+    modtm     = provider.modtm.main
+    random    = provider.random.main
+    alz       = provider.alz.main
+    time      = provider.time.main
     terraform = provider.terraform.main
   }
 
@@ -85,7 +85,7 @@ component "hub_and_spoke_vnet" {
     tags                            = var.tags
   }
   providers = {
-    azapi  = provider.azapi.main
+    azapi   = provider.azapi.main
     azurerm = provider.azurerm.connectivity
     modtm   = provider.modtm.main
     random  = provider.random.main

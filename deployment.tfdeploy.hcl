@@ -5,7 +5,7 @@ identity_token "azurerm" {
 deployment "alz" {
   inputs = {
     identity_token = identity_token.azurerm.jwt
-    client_id      = var.client_id
-    tenant_id      = var.tenant_id
+    client_id      = "461ee346-9821-44ed-aba5-fa989c69dca3"
+    tenant_id      = "ff5b675b-cd9a-46ea-94c5-6c7e19a18f82"
   }
 }
