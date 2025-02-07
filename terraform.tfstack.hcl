@@ -28,6 +28,9 @@ required_providers {
     source  = "hashicorp/time"
     version = "~> 0.9"
   }
+  terraform = {
+    source  = "terraform.io/builtin/terraform"
+  }
 }
 
 provider "terraform" "main" {
