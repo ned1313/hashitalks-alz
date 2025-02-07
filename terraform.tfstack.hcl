@@ -30,6 +30,10 @@ required_providers {
   }
 }
 
+provider "terraform" "main" {
+  config {}
+}
+
 provider "local" "main" {
   config {}
 }
@@ -55,7 +59,7 @@ provider "alz" "main" {
     library_overwrite_enabled = true
     library_references = [
       {
-        custom_url = "${path.root}/lib"
+        custom_url = "./lib"
       }
     ]
   }

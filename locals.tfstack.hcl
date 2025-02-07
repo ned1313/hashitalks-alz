@@ -17,6 +17,8 @@ Replacements are denoted by the dollar-dollar curly braces token (e.g. $${starte
 --- Custom Replacements ---
 You can define custom replacements to use throughout the configuration.
 */
+
+locals {
 custom_replacements = {
   /* 
   --- Custom Name Replacements ---
@@ -325,4 +327,5 @@ hub_and_spoke_vnet_virtual_networks = {
       }
     }
   }
+}
 }

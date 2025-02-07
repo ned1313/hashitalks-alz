@@ -81,7 +81,7 @@ locals {
 
 # Resource Group Names
 locals {
-  resource_group_name_replacements = { for key, value in module.resource_groups : "connectivity_resource_group_${key}" => value.name }
+  resource_group_name_replacements = { for key, value in local.connectivity_resource_groups : "connectivity_resource_group_${key}" => value.name }
 }
 
 locals {

@@ -14,6 +14,7 @@ locals {
 
 
 ## You're going to need to figure this out later
+/*
 locals {
   management_group_dependencies = {
     policy_assignments = [
@@ -28,3 +29,4 @@ locals {
     ]
   }
 }
+*/

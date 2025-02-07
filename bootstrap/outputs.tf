@@ -27,7 +27,9 @@ output "connectivity_resource_groups" {
 
 }
 
+/*
 output "management_group_dependencies" {
   value = local.management_group_dependencies
 
 }
+*/

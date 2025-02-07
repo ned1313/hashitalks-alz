@@ -1,14 +1,12 @@
 component "bootstrap" {
   source = "./bootstrap"
   inputs = {
-    hub_and_spoke_vnet_settings         = var.hub_and_spoke_vnet_settings
-    hub_and_spoke_vnet_virtual_networks = var.hub_and_spoke_vnet_virtual_networks
-    connectivity_type                   = var.connectivity_type
-    connectivity_resource_groups        = var.connectivity_resource_groups
-    virtual_wan_settings                = var.virtual_wan_settings
-    virtual_wan_virtual_hubs            = var.virtual_wan_virtual_hubs
-    management_resource_settings        = var.management_resource_settings
-    management_group_settings           = var.management_group_settings
+    hub_and_spoke_vnet_settings         = local.hub_and_spoke_vnet_settings
+    hub_and_spoke_vnet_virtual_networks = local.hub_and_spoke_vnet_virtual_networks
+    connectivity_type                   = local.connectivity_type
+    connectivity_resource_groups        = local.connectivity_resource_groups
+    management_resource_settings        = local.management_resource_settings
+    management_group_settings           = local.management_group_settings
     starter_locations                   = var.starter_locations
     subscription_id_connectivity        = var.subscription_id_connectivity
     subscription_id_identity            = var.subscription_id_identity
@@ -31,7 +29,7 @@ component "management_resources" {
   source = "./management_resources"
   inputs = {
     enable_telemetry             = var.enable_telemetry
-    management_resource_settings = module.bootstrap.management_resource_settings
+    management_resource_settings = component.bootstrap.management_resource_settings
     tags                         = var.tags
   }
   providers = {
@@ -46,8 +44,8 @@ component "management_groups" {
   source = "./management_groups"
   inputs = {
     enable_telemetry          = var.enable_telemetry
-    management_group_settings = module.bootstrap.management_group_settings
-    dependencies              = module.bootstrap.management_group_dependencies
+    management_group_settings = component.bootstrap.management_group_settings
+    dependencies              = component.bootstrap.management_group_dependencies
   }
   providers = {
     azapi  = provider.azapi.main
@@ -55,6 +53,7 @@ component "management_groups" {
     random = provider.random.main
     alz    = provider.alz.main
     time   = provider.time.main
+    terraform = provider.terraform.main
   }
 
   # Need to figure out policy assignments and role assignments dependencies
@@ -63,7 +62,7 @@ component "management_groups" {
 component "resource_groups" {
   source   = "Azure/avm-res-resources-resourcegroup/azurerm"
   version  = "0.2.0"
-  for_each = module.bootstrap.connectivity_resource_groups
+  for_each = component.bootstrap.connectivity_resource_groups
   inputs = {
     name             = each.value.name
     location         = each.value.location
@@ -80,12 +79,13 @@ component "resource_groups" {
 component "hub_and_spoke_vnet" {
   source = "./hub-and-spoke-vnet"
   inputs = {
-    hub_and_spoke_networks_settings = module.bootstrap.hub_and_spoke_vnet_settings
-    hub_virtual_networks            = module.bootstrap.hub_and_spoke_vnet_virtual_networks
+    hub_and_spoke_networks_settings = component.bootstrap.hub_and_spoke_vnet_settings
+    hub_virtual_networks            = component.bootstrap.hub_and_spoke_vnet_virtual_networks
     enable_telemetry                = var.enable_telemetry
     tags                            = var.tags
   }
   providers = {
+    azapi  = provider.azapi.main
     azurerm = provider.azurerm.connectivity
     modtm   = provider.modtm.main
     random  = provider.random.main
