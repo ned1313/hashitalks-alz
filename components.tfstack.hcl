@@ -2,7 +2,7 @@ component "resource_groups" {
   source = "./resource_groups"
   inputs = {
     enable_telemetry = var.enable_telemetry
-    connectivity_resource_groups  = local.resource_groups
+    connectivity_resource_groups  = local.connectivity_resource_groups
     tags             = var.tags
   }
   providers = {

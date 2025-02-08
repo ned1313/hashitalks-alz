@@ -95,12 +95,12 @@ locals {
   NOTE: You cannot refer to another custom resource identifier in this variable.
   */
     resource_identifiers = {
-      ama_change_tracking_data_collection_rule_id = "${local.management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/${local.dcr_change_tracking_name}"
-      ama_mdfc_sql_data_collection_rule_id        = "${local.management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/${local.dcr_defender_sql_name}"
-      ama_vm_insights_data_collection_rule_id     = "${local.management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/${local.dcr_vm_insights_name}"
-      ama_user_assigned_managed_identity_id       = "${local.management_resource_group_id}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${local.ama_user_assigned_managed_identity_name}"
-      log_analytics_workspace_id                  = "${local.management_resource_group_id}/providers/Microsoft.OperationalInsights/workspaces/${local.log_analytics_workspace_name}"
-      ddos_protection_plan_id                     = "${local.ddos_protection_plan_resource_group_id}/providers/Microsoft.Network/ddosProtectionPlans/${local.ddos_protection_plan_name}"
+      ama_change_tracking_data_collection_rule_id = "${local.resource_group_identifiers.management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/${local.dcr_change_tracking_name}"
+      ama_mdfc_sql_data_collection_rule_id        = "${local.resource_group_identifiers.management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/${local.dcr_defender_sql_name}"
+      ama_vm_insights_data_collection_rule_id     = "${local.resource_group_identifiers.management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/${local.dcr_vm_insights_name}"
+      ama_user_assigned_managed_identity_id       = "${local.resource_group_identifiers.management_resource_group_id}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${local.ama_user_assigned_managed_identity_name}"
+      log_analytics_workspace_id                  = "${local.resource_group_identifiers.management_resource_group_id}/providers/Microsoft.OperationalInsights/workspaces/${local.log_analytics_workspace_name}"
+      ddos_protection_plan_id                     = "${local.resource_group_identifiers.ddos_protection_plan_resource_group_id}/providers/Microsoft.Network/ddosProtectionPlans/${local.ddos_protection_plan_name}"
     }
 
   enable_telemetry = true
@@ -152,13 +152,13 @@ You can further configure management groups and policy by supplying a `lib` fold
     location           = var.starter_locations[0]
     parent_resource_id = var.root_parent_management_group_id
     policy_default_values = {
-      ama_change_tracking_data_collection_rule_id = local.ama_change_tracking_data_collection_rule_id
-      ama_mdfc_sql_data_collection_rule_id        = local.ama_mdfc_sql_data_collection_rule_id
-      ama_vm_insights_data_collection_rule_id     = local.ama_vm_insights_data_collection_rule_id
-      ama_user_assigned_managed_identity_id       = local.ama_user_assigned_managed_identity_id
+      ama_change_tracking_data_collection_rule_id = local.resource_identifiers.ama_change_tracking_data_collection_rule_id
+      ama_mdfc_sql_data_collection_rule_id        = local.resource_identifiers.ama_mdfc_sql_data_collection_rule_id
+      ama_vm_insights_data_collection_rule_id     = local.resource_identifiers.ama_vm_insights_data_collection_rule_id
+      ama_user_assigned_managed_identity_id       = local.resource_identifiers.ama_user_assigned_managed_identity_id
       ama_user_assigned_managed_identity_name     = local.ama_user_assigned_managed_identity_name
-      log_analytics_workspace_id                  = local.log_analytics_workspace_id
-      ddos_protection_plan_id                     = local.ddos_protection_plan_id
+      log_analytics_workspace_id                  = local.resource_identifiers.log_analytics_workspace_id
+      ddos_protection_plan_id                     = local.resource_identifiers.ddos_protection_plan_id
       private_dns_zone_subscription_id            = var.subscription_id_connectivity
       private_dns_zone_region                     = var.starter_locations[0]
       private_dns_zone_resource_group_name        = local.dns_resource_group_name
@@ -268,7 +268,7 @@ You can use this section to customize the hub virtual networking that will be de
         routing_address_space         = [local.primary_hub_address_space]
         route_table_name_firewall     = local.primary_route_table_firewall_name
         route_table_name_user_subnets = local.primary_route_table_user_subnets_name
-        ddos_protection_plan_id       = local.ddos_protection_plan_id
+        ddos_protection_plan_id       = local.resource_identifiers.ddos_protection_plan_id
         hub_router_ip_address         = local.primary_nva_ip_address
         subnets = {
           nva = {
@@ -297,7 +297,7 @@ You can use this section to customize the hub virtual networking that will be de
         routing_address_space         = [local.secondary_hub_address_space]
         route_table_name_firewall     = local.secondary_route_table_firewall_name
         route_table_name_user_subnets = local.secondary_route_table_user_subnets_name
-        ddos_protection_plan_id       = local.ddos_protection_plan_id
+        ddos_protection_plan_id       = local.resource_identifiers.ddos_protection_plan_id
         hub_router_ip_address         = local.secondary_nva_ip_address
         subnets = {
           nva = {
