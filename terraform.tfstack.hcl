@@ -62,7 +62,7 @@ provider "alz" "main" {
     library_overwrite_enabled = true
     library_references = [
       {
-        custom_url = "./lib"
+        path = "platform/alz", tag = "2025.01.0"
       }
     ]
   }
