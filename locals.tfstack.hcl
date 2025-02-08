@@ -103,7 +103,7 @@ locals {
       ddos_protection_plan_id                     = "${local.resource_group_identifiers.ddos_protection_plan_resource_group_id}/providers/Microsoft.Network/ddosProtectionPlans/${local.ddos_protection_plan_name}"
     }
 
-  enable_telemetry = true
+  enable_telemetry = false
 
   /*
 --- Tags ---
