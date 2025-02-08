@@ -1,7 +1,7 @@
 /*
 --- Built-in Replacements ---
 This file contains built-in replacements to avoid repeating the same hard-coded values.
-Replacements are denoted by the dollar-dollar curly braces token (e.g. $${starter_location_01}). The following details each built-in replacemnets that you can use:
+Replacements are denoted by the dollar-dollar curly braces token (e.g. ${var.starter_locations[0]}). The following details each built-in replacemnets that you can use:
 `starter_location_01`: This the primary an Azure location sourced from the `starter_locations` variable. This can be used to set the location of resources.
 `starter_location_02` to `starter_location_10`: These are the secondary Azure locations sourced from the `starter_locations` variable. This can be used to set the location of resources.
 `starter_location_01_availability_zones` to `starter_location_10_availability_zones`: These are the availability zones for the Azure locations sourced from the `starter_locations` variable. This can be used to set the availability zones of resources.
@@ -19,53 +19,45 @@ You can define custom replacements to use throughout the configuration.
 */
 
 locals {
-  custom_replacements = {
-    /* 
-  --- Custom Name Replacements ---
-  You can define custom names and other strings to use throughout the configuration. 
-  You can only use the built in replacements in this section.
-  NOTE: You cannot refer to another custom name in this variable.
-  */
-    names = {
       # Defender email security contact
       defender_email_security_contact = "ned@nedinthecloud.com"
 
       # Resource group names
-      management_resource_group_name                 = "rg-management-$${starter_location_01}"
-      connectivity_hub_primary_resource_group_name   = "rg-hub-$${starter_location_01}"
-      connectivity_hub_secondary_resource_group_name = "rg-hub-$${starter_location_02}"
-      dns_resource_group_name                        = "rg-hub-dns-$${starter_location_01}"
-      ddos_resource_group_name                       = "rg-hub-ddos-$${starter_location_01}"
-      asc_export_resource_group_name                 = "rg-asc-export-$${starter_location_01}"
+      management_resource_group_name                 = "rg-management-${var.starter_locations[0]}"
+      connectivity_hub_primary_resource_group_name   = "rg-hub-${var.starter_locations[0]}"
+      connectivity_hub_secondary_resource_group_name = "rg-hub-${var.starter_locations[1]}"
+      dns_resource_group_name                        = "rg-hub-dns-${var.starter_locations[0]}"
+      ddos_resource_group_name                       = "rg-hub-ddos-${var.starter_locations[0]}"
+      asc_export_resource_group_name                 = "rg-asc-export-${var.starter_locations[0]}"
 
       # Resource names
-      log_analytics_workspace_name            = "law-management-$${starter_location_01}"
-      ddos_protection_plan_name               = "ddos-$${starter_location_01}"
-      automation_account_name                 = "aa-management-$${starter_location_01}"
-      ama_user_assigned_managed_identity_name = "uami-management-ama-$${starter_location_01}"
+      log_analytics_workspace_name            = "law-management-${var.starter_locations[0]}"
+      ddos_protection_plan_name               = "ddos-${var.starter_locations[0]}"
+      automation_account_name                 = "aa-management-${var.starter_locations[0]}"
+      ama_user_assigned_managed_identity_name = "uami-management-ama-${var.starter_locations[0]}"
       dcr_change_tracking_name                = "dcr-change-tracking"
       dcr_defender_sql_name                   = "dcr-defender-sql"
       dcr_vm_insights_name                    = "dcr-vm-insights"
 
       # Resource names primary connectivity
-      primary_virtual_network_name          = "vnet-hub-$${starter_location_01}"
-      primary_subnet_nva_name               = "subnet-nva-$${starter_location_01}"
-      primary_route_table_firewall_name     = "rt-hub-fw-$${starter_location_01}"
-      primary_route_table_user_subnets_name = "rt-hub-std-$${starter_location_01}"
-      primary_private_dns_resolver_name     = "pdr-hub-dns-$${starter_location_01}"
+      primary_virtual_network_name          = "vnet-hub-${var.starter_locations[0]}"
+      primary_subnet_nva_name               = "subnet-nva-${var.starter_locations[0]}"
+      primary_route_table_firewall_name     = "rt-hub-fw-${var.starter_locations[0]}"
+      primary_route_table_user_subnets_name = "rt-hub-std-${var.starter_locations[0]}"
+      primary_private_dns_resolver_name     = "pdr-hub-dns-${var.starter_locations[0]}"
 
       # Resource names secondary connectivity
-      secondary_virtual_network_name          = "vnet-hub-$${starter_location_02}"
-      secondary_subnet_nva_name               = "subnet-nva-$${starter_location_02}"
-      secondary_route_table_firewall_name     = "rt-hub-fw-$${starter_location_02}"
-      secondary_route_table_user_subnets_name = "rt-hub-std-$${starter_location_02}"
-      secondary_private_dns_resolver_name     = "pdr-hub-dns-$${starter_location_02}"
+      secondary_virtual_network_name          = "vnet-hub-${var.starter_locations[1]}"
+      secondary_subnet_nva_name               = "subnet-nva-${var.starter_locations[1]}"
+      secondary_route_table_firewall_name     = "rt-hub-fw-${var.starter_locations[1]}"
+      secondary_route_table_user_subnets_name = "rt-hub-std-${var.starter_locations[1]}"
+      secondary_private_dns_resolver_name     = "pdr-hub-dns-${var.starter_locations[1]}"
 
       # Private DNS Zones primary
-      primary_auto_registration_zone_name = "$${starter_location_01}.azure.local"
+      primary_auto_registration_zone_name = "${var.starter_locations[0]}.azure.local"
 
       # Private DNS Zones secondary
-      secondary_auto_registration_zone_name = "$${starter_location_02}.azure.local"
+      secondary_auto_registration_zone_name = "${var.starter_locations[1]}.azure.local"
 
       # IP Ranges Primary
       # Regional Address Space: 10.0.0.0/16
@@ -84,7 +76,6 @@ locals {
       secondary_nva_ip_address                             = "10.1.0.4"
       secondary_gateway_subnet_address_prefix              = "10.1.0.128/27"
       secondary_private_dns_resolver_subnet_address_prefix = "10.1.0.160/28"
-    }
 
     /* 
   --- Custom Resource Group Identifier Replacements ---
@@ -93,8 +84,8 @@ locals {
   NOTE: You cannot refer to another custom resource group identifier in this variable.
   */
     resource_group_identifiers = {
-      management_resource_group_id           = "/subscriptions/$${subscription_id_management}/resourcegroups/$${management_resource_group_name}"
-      ddos_protection_plan_resource_group_id = "/subscriptions/$${subscription_id_connectivity}/resourcegroups/$${ddos_resource_group_name}"
+      management_resource_group_id           = "/subscriptions/${var.subscription_id_management}/resourcegroups/${local.management_resource_group_name}"
+      ddos_protection_plan_resource_group_id = "/subscriptions/${var.subscription_id_connectivity}/resourcegroups/${local.ddos_resource_group_name}"
     }
 
     /* 
@@ -104,14 +95,13 @@ locals {
   NOTE: You cannot refer to another custom resource identifier in this variable.
   */
     resource_identifiers = {
-      ama_change_tracking_data_collection_rule_id = "$${management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/$${dcr_change_tracking_name}"
-      ama_mdfc_sql_data_collection_rule_id        = "$${management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/$${dcr_defender_sql_name}"
-      ama_vm_insights_data_collection_rule_id     = "$${management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/$${dcr_vm_insights_name}"
-      ama_user_assigned_managed_identity_id       = "$${management_resource_group_id}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/$${ama_user_assigned_managed_identity_name}"
-      log_analytics_workspace_id                  = "$${management_resource_group_id}/providers/Microsoft.OperationalInsights/workspaces/$${log_analytics_workspace_name}"
-      ddos_protection_plan_id                     = "$${ddos_protection_plan_resource_group_id}/providers/Microsoft.Network/ddosProtectionPlans/$${ddos_protection_plan_name}"
+      ama_change_tracking_data_collection_rule_id = "${local.management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/${local.dcr_change_tracking_name}"
+      ama_mdfc_sql_data_collection_rule_id        = "${local.management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/${local.dcr_defender_sql_name}"
+      ama_vm_insights_data_collection_rule_id     = "${local.management_resource_group_id}/providers/Microsoft.Insights/dataCollectionRules/${local.dcr_vm_insights_name}"
+      ama_user_assigned_managed_identity_id       = "${local.management_resource_group_id}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${local.ama_user_assigned_managed_identity_name}"
+      log_analytics_workspace_id                  = "${local.management_resource_group_id}/providers/Microsoft.OperationalInsights/workspaces/${local.log_analytics_workspace_name}"
+      ddos_protection_plan_id                     = "${local.ddos_protection_plan_resource_group_id}/providers/Microsoft.Network/ddosProtectionPlans/${local.ddos_protection_plan_name}"
     }
-  }
 
   enable_telemetry = true
 
@@ -130,24 +120,24 @@ You can use this section to customize the management resources that will be depl
 */
 
   management_resource_settings = {
-    automation_account_name      = "$${automation_account_name}"
-    location                     = "$${starter_location_01}"
-    log_analytics_workspace_name = "$${log_analytics_workspace_name}"
-    resource_group_name          = "$${management_resource_group_name}"
+    automation_account_name      = local.automation_account_name
+    location                     = var.starter_locations[0]
+    log_analytics_workspace_name = local.log_analytics_workspace_name
+    resource_group_name          = local.management_resource_group_name
     user_assigned_managed_identities = {
       ama = {
-        name = "$${ama_user_assigned_managed_identity_name}"
+        name = local.ama_user_assigned_managed_identity_name
       }
     }
     data_collection_rules = {
       change_tracking = {
-        name = "$${dcr_change_tracking_name}"
+        name = local.dcr_change_tracking_name
       }
       defender_sql = {
-        name = "$${dcr_defender_sql_name}"
+        name = local.dcr_defender_sql_name
       }
       vm_insights = {
-        name = "$${dcr_vm_insights_name}"
+        name = local.dcr_vm_insights_name
       }
     }
   }
@@ -159,31 +149,31 @@ You can further configure management groups and policy by supplying a `lib` fold
 */
 
   management_group_settings = {
-    location           = "$${starter_location_01}"
-    parent_resource_id = "$${root_parent_management_group_id}"
+    location           = var.starter_locations[0]
+    parent_resource_id = var.root_parent_management_group_id
     policy_default_values = {
-      ama_change_tracking_data_collection_rule_id = "$${ama_change_tracking_data_collection_rule_id}"
-      ama_mdfc_sql_data_collection_rule_id        = "$${ama_mdfc_sql_data_collection_rule_id}"
-      ama_vm_insights_data_collection_rule_id     = "$${ama_vm_insights_data_collection_rule_id}"
-      ama_user_assigned_managed_identity_id       = "$${ama_user_assigned_managed_identity_id}"
-      ama_user_assigned_managed_identity_name     = "$${ama_user_assigned_managed_identity_name}"
-      log_analytics_workspace_id                  = "$${log_analytics_workspace_id}"
-      ddos_protection_plan_id                     = "$${ddos_protection_plan_id}"
-      private_dns_zone_subscription_id            = "$${subscription_id_connectivity}"
-      private_dns_zone_region                     = "$${starter_location_01}"
-      private_dns_zone_resource_group_name        = "$${dns_resource_group_name}"
+      ama_change_tracking_data_collection_rule_id = local.ama_change_tracking_data_collection_rule_id
+      ama_mdfc_sql_data_collection_rule_id        = local.ama_mdfc_sql_data_collection_rule_id
+      ama_vm_insights_data_collection_rule_id     = local.ama_vm_insights_data_collection_rule_id
+      ama_user_assigned_managed_identity_id       = local.ama_user_assigned_managed_identity_id
+      ama_user_assigned_managed_identity_name     = local.ama_user_assigned_managed_identity_name
+      log_analytics_workspace_id                  = local.log_analytics_workspace_id
+      ddos_protection_plan_id                     = local.ddos_protection_plan_id
+      private_dns_zone_subscription_id            = var.subscription_id_connectivity
+      private_dns_zone_region                     = var.starter_locations[0]
+      private_dns_zone_resource_group_name        = local.dns_resource_group_name
     }
     subscription_placement = {
       identity = {
-        subscription_id       = "$${subscription_id_identity}"
+        subscription_id       = var.subscription_id_identity
         management_group_name = "identity"
       }
       connectivity = {
-        subscription_id       = "$${subscription_id_connectivity}"
+        subscription_id       = var.subscription_id_connectivity
         management_group_name = "connectivity"
       }
       management = {
-        subscription_id       = "$${subscription_id_management}"
+        subscription_id       = var.subscription_id_management
         management_group_name = "management"
       }
     }
@@ -192,9 +182,9 @@ You can further configure management groups and policy by supplying a `lib` fold
         policy_assignments = {
           Deploy-MDFC-Config-H224 = {
             parameters = {
-              ascExportResourceGroupName                  = "$${asc_export_resource_group_name}"
-              ascExportResourceGroupLocation              = "$${starter_location_01}"
-              emailSecurityContact                        = "$${defender_email_security_contact}"
+              ascExportResourceGroupName                  = local.asc_export_resource_group_name
+              ascExportResourceGroupLocation              = var.starter_locations[0]
+              emailSecurityContact                        = local.defender_email_security_contact
               enableAscForServers                         = "DeployIfNotExists"
               enableAscForServersVulnerabilityAssessments = "DeployIfNotExists"
               enableAscForSql                             = "DeployIfNotExists"
@@ -243,87 +233,87 @@ You can use this section to customize the hub virtual networking that will be de
 
   connectivity_resource_groups = {
     ddos = {
-      name     = "$${ddos_resource_group_name}"
-      location = "$${starter_location_01}"
+      name     = local.ddos_resource_group_name
+      location = var.starter_locations[0]
     }
     vnet_primary = {
-      name     = "$${connectivity_hub_primary_resource_group_name}"
-      location = "$${starter_location_01}"
+      name     = local.connectivity_hub_primary_resource_group_name
+      location = var.starter_locations[0]
     }
     vnet_secondary = {
-      name     = "$${connectivity_hub_secondary_resource_group_name}"
-      location = "$${starter_location_02}"
+      name     = local.connectivity_hub_secondary_resource_group_name
+      location = var.starter_locations[1]
     }
     dns = {
-      name     = "$${dns_resource_group_name}"
-      location = "$${starter_location_01}"
+      name     = local.dns_resource_group_name
+      location = var.starter_locations[0]
     }
   }
 
   hub_and_spoke_vnet_settings = {
     ddos_protection_plan = {
-      name                = "$${ddos_protection_plan_name}"
-      resource_group_name = "$${ddos_resource_group_name}"
-      location            = "$${starter_location_01}"
+      name                = local.ddos_protection_plan_name
+      resource_group_name = local.ddos_resource_group_name
+      location            = var.starter_locations[0]
     }
   }
 
   hub_and_spoke_vnet_virtual_networks = {
     primary = {
       hub_virtual_network = {
-        name                          = "$${primary_virtual_network_name}"
-        resource_group_name           = "$${connectivity_hub_primary_resource_group_name}"
-        location                      = "$${starter_location_01}"
-        address_space                 = ["$${primary_hub_virtual_network_address_space}"]
-        routing_address_space         = ["$${primary_hub_address_space}"]
-        route_table_name_firewall     = "$${primary_route_table_firewall_name}"
-        route_table_name_user_subnets = "$${primary_route_table_user_subnets_name}"
-        ddos_protection_plan_id       = "$${ddos_protection_plan_id}"
-        hub_router_ip_address         = "$${primary_nva_ip_address}"
+        name                          = local.primary_virtual_network_name
+        resource_group_name           = local.connectivity_hub_primary_resource_group_name
+        location                      = var.starter_locations[0]
+        address_space                 = [local.primary_hub_virtual_network_address_space]
+        routing_address_space         = [local.primary_hub_address_space]
+        route_table_name_firewall     = local.primary_route_table_firewall_name
+        route_table_name_user_subnets = local.primary_route_table_user_subnets_name
+        ddos_protection_plan_id       = local.ddos_protection_plan_id
+        hub_router_ip_address         = local.primary_nva_ip_address
         subnets = {
           nva = {
-            name             = "$${primary_subnet_nva_name}"
-            address_prefixes = ["$${primary_nva_subnet_address_prefix}"]
+            name             = local.primary_subnet_nva_name
+            address_prefixes = [local.primary_nva_subnet_address_prefix]
           }
         }
       }
       private_dns_zones = {
-        resource_group_name            = "$${dns_resource_group_name}"
+        resource_group_name            = local.dns_resource_group_name
         is_primary                     = true
         auto_registration_zone_enabled = true
-        auto_registration_zone_name    = "$${primary_auto_registration_zone_name}.azure.local"
-        subnet_address_prefix          = "$${primary_private_dns_resolver_subnet_address_prefix}"
+        auto_registration_zone_name    = "${local.primary_auto_registration_zone_name}.azure.local"
+        subnet_address_prefix          = "${local.primary_private_dns_resolver_subnet_address_prefix}"
         private_dns_resolver = {
-          name = "$${primary_private_dns_resolver_name}"
+          name = local.primary_private_dns_resolver_name
         }
       }
     }
     secondary = {
       hub_virtual_network = {
-        name                          = "$${secondary_virtual_network_name}"
-        resource_group_name           = "$${connectivity_hub_secondary_resource_group_name}"
-        location                      = "$${starter_location_02}"
-        address_space                 = ["$${secondary_hub_virtual_network_address_space}"]
-        routing_address_space         = ["$${secondary_hub_address_space}"]
-        route_table_name_firewall     = "$${secondary_route_table_firewall_name}"
-        route_table_name_user_subnets = "$${secondary_route_table_user_subnets_name}"
-        ddos_protection_plan_id       = "$${ddos_protection_plan_id}"
-        hub_router_ip_address         = "$${secondary_nva_ip_address}"
+        name                          = local.secondary_virtual_network_name
+        resource_group_name           = local.connectivity_hub_secondary_resource_group_name
+        location                      = var.starter_locations[1]
+        address_space                 = [local.secondary_hub_virtual_network_address_space]
+        routing_address_space         = [local.secondary_hub_address_space]
+        route_table_name_firewall     = local.secondary_route_table_firewall_name
+        route_table_name_user_subnets = local.secondary_route_table_user_subnets_name
+        ddos_protection_plan_id       = local.ddos_protection_plan_id
+        hub_router_ip_address         = local.secondary_nva_ip_address
         subnets = {
           nva = {
-            name             = "$${secondary_subnet_nva_name}"
-            address_prefixes = ["$${secondary_nva_subnet_address_prefix}"]
+            name             = local.secondary_subnet_nva_name
+            address_prefixes = [local.secondary_nva_subnet_address_prefix]
           }
         }
       }
       private_dns_zones = {
-        resource_group_name            = "$${dns_resource_group_name}"
+        resource_group_name            = local.dns_resource_group_name
         is_primary                     = false
         auto_registration_zone_enabled = true
-        auto_registration_zone_name    = "$${secondary_auto_registration_zone_name}.azure.local"
-        subnet_address_prefix          = "$${secondary_private_dns_resolver_subnet_address_prefix}"
+        auto_registration_zone_name    = "${local.secondary_auto_registration_zone_name}.azure.local"
+        subnet_address_prefix          = "${local.secondary_private_dns_resolver_subnet_address_prefix}"
         private_dns_resolver = {
-          name = "$${secondary_private_dns_resolver_name}"
+          name = local.secondary_private_dns_resolver_name
         }
       }
     }

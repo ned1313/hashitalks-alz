@@ -84,3 +84,25 @@ This repository is meant to work with HCP Terraform Stacks and the newly release
   * Also will be super useful when deploying Application landing zones (make use of multiple deployments in the stacks for each app)
 * Should you use the accelerator?
   * Maybe? I think it gives a good starting point, but you're going to have to refactor a lot. I like that b/c it helps me understand what's actually happening. But the more you diverge from the accelerator, the more you have to maintain.
+
+## Analysis
+
+### avm-utl-regions
+
+This module is not actually used at all. Can be safely removed
+
+### avm-res-resources-resourcegroups
+
+Creates resource groups in the connectivity subscription. Uses the contents of local `connectivity_resource_groups`. Defined in local.resource_groups and dependent on var.conenctivity_resource_groups.
+
+Dependencies? None, as far as I can tell. This should be its own component.
+
+### avm-ptn-alz-management
+
+Inside the management_resources module. What does this module actually do? It creates the log analytics workspace, automation account, and user assigned identity in the management subscription. No pre-requisites as far as I can tell. This can be its own component and doesn't have to be in a module.
+
+### avm-ptn-alz
+
+This one is what actually sets up the management group structure and assigns subscriptions. It also applies policies. It has a list of possible dependencies, which I don't really understand. So basically all the objects need to exist prior to this module running a plan due to the need for computed values. We can avoid using the dependency argument through the use of stacks.
+
+
