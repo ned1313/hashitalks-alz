@@ -51,20 +51,6 @@ variable "enable_telemetry" {
   description = "Flag to enable/disable telemetry"
 }
 
-variable "custom_replacements" {
-  type = object({
-    names                      = optional(map(string), {})
-    resource_group_identifiers = optional(map(string), {})
-    resource_identifiers       = optional(map(string), {})
-  })
-  default = {
-    names                      = {}
-    resource_group_identifiers = {}
-    resource_identifiers       = {}
-  }
-  description = "Custom replacements"
-}
-
 variable "tags" {
   type        = map(string)
   default     = null
