@@ -113,7 +113,7 @@ provider "azurerm" "management" {
 
 provider "azurerm" "connectivity" {
   config {
-    resource_provider_registrations = "none"
+    #resource_provider_registrations = "none"
     use_oidc                        = true
     oidc_token                      = var.identity_token
     client_id                       = var.client_id
