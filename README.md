@@ -106,3 +106,4 @@ Inside the management_resources module. What does this module actually do? It cr
 This one is what actually sets up the management group structure and assigns subscriptions. It also applies policies. It has a list of possible dependencies, which I don't really understand. So basically all the objects need to exist prior to this module running a plan due to the need for computed values. We can avoid using the dependency argument through the use of stacks.
 
 
+small change
