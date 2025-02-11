@@ -29,7 +29,7 @@ required_providers {
     version = "~> 0.9"
   }
   terraform = {
-    source  = "terraform.io/builtin/terraform"
+    source = "terraform.io/builtin/terraform"
   }
 }
 
